@@ -3,6 +3,7 @@ include 'header_admin.php';
 
 $sql = "SELECT * FROM profil WHERE id = 1";
 $result = $conn->query($sql);
+$has_profil = $result->num_rows;
 $data = $result->fetch_assoc();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -86,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!isset($error)) {
-        if ($result->num_rows == 0) {
+        if ($has_profil == 0) {
             $query_exec = "INSERT INTO profil (id, hero_title, hero_subtitle, sejarah, visi, misi, gambar, foto_dashboard, alamat_kontak, telepon, email, maps, ig, tiktok) VALUES (1, '$hero_title', '$hero_subtitle', '$sejarah', '$visi', '$misi', '$gambar_baru', '$foto_dashboard_baru', '$alamat_kontak', '$telepon', '$email', '$maps', '$ig', '$tiktok')";
         } else {
             $query_exec = "UPDATE profil SET hero_title='$hero_title', hero_subtitle='$hero_subtitle', sejarah='$sejarah', visi='$visi', misi='$misi', gambar='$gambar_baru', foto_dashboard='$foto_dashboard_baru', alamat_kontak='$alamat_kontak', telepon='$telepon', email='$email', maps='$maps', ig='$ig', tiktok='$tiktok' WHERE id=1";

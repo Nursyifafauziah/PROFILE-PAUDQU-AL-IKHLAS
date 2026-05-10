@@ -8,7 +8,7 @@ $mail_config = [
     'encryption' => 'ssl', // 'ssl' atau 'tls'
     
     // UBAH BAGIAN INI DENGAN EMAIL DAN SANDI APLIKASI ANDA:
-    'username' => 'paudqu.alikhlas88@gmail.com, // Contoh: adminpaudqu@gmail.com
+    'username' => 'paudqu.alikhlas88@gmail.com', // Contoh: adminpaudqu@gmail.com
     'password' => 'bnehdtooosgnhwhz', // Contoh: xxxx xxxx xxxx xxxx (tanpa spasi)
     
     'from_email' => 'paudqu.alikhlas88@gmail.com', // Email yang akan muncul sebagai pengirim

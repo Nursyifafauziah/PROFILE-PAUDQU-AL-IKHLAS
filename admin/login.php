@@ -44,9 +44,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Login Admin - PAUDQU Al-Ikhlas</title>
     <link rel="icon" href="<?= $favicon_img_login ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f4f6f9; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        body { font-family: 'Roboto', sans-serif; background-color: #f4f6f9; display: flex; align-items: center; justify-content: center; height: 100vh; }
         .login-card { width: 100%; max-width: 400px; border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .login-header { background-color: #28a745; color: white; border-radius: 15px 15px 0 0; padding: 30px 20px; text-align: center; }
         .btn-login { background-color: #28a745; color: white; border-radius: 50px; font-weight: 600; padding: 10px; }

@@ -75,7 +75,7 @@ $dashboard_img = (!empty($data_profil['foto_dashboard'])) ? '../uploads/' . $dat
                 </div>
             </div>
             <div class="card-footer bg-transparent border-0 px-4 pb-3">
-                <a href="kegiatan.php" class="text-white text-decoration-none small">Lihat Detail <i class="fas fa-arrow-right ms-1"></i></a>
+                <a href="pengumuman.php" class="text-white text-decoration-none small">Lihat Detail <i class="fas fa-arrow-right ms-1"></i></a>
             </div>
         </div>
     </div>

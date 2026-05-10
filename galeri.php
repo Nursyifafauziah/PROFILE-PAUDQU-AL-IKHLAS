@@ -1,61 +1,94 @@
 <?php
-include 'header_admin.php';
+include 'header.php';
 
+// Fetch gallery images from database
 $sql = "SELECT * FROM galeri ORDER BY tanggal_upload DESC";
 $result = $conn->query($sql);
 ?>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="fw-bold mb-0">Kelola Galeri</h3>
-    <a href="tambah_galeri.php" class="btn btn-primary rounded-pill px-4 shadow-sm"><i class="fas fa-plus me-2"></i> Tambah Foto Baru</a>
+<div class="page-header fade-in">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Galeri</h1>
+        <p class="lead">Dokumentasi momen berharga dan aktivitas pembelajaran di PAUDQU Al-Ikhlas</p>
+    </div>
 </div>
 
-<?php
-if (isset($_SESSION['pesan'])) {
-    echo '<div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-            ' . $_SESSION['pesan'] . '
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>';
-    unset($_SESSION['pesan']);
-}
-if (isset($_SESSION['error'])) {
-    echo '<div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
-            ' . $_SESSION['error'] . '
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>';
-    unset($_SESSION['error']);
-}
-?>
-
-<div class="card border-0 shadow-sm rounded-4">
-    <div class="card-body p-4">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            <?php if ($result->num_rows > 0): ?>
-                <?php while($row = $result->fetch_assoc()): ?>
-                    <div class="col">
-                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden position-relative group">
-                            <img src="../uploads/<?= htmlspecialchars($row['gambar']) ?>" class="card-img-top" alt="Foto Galeri" style="height: 200px; object-fit: cover;">
-                            <div class="card-body">
-                                <small class="text-muted"><i class="fas fa-clock me-1"></i> <?= date('d M Y, H:i', strtotime($row['tanggal_upload'])) ?></small>
-                            </div>
-                            <div class="card-footer bg-white border-0 text-end pb-3 pe-3">
-                                <a href="hapus_galeri.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus foto ini?');"><i class="fas fa-trash-alt me-1"></i> Hapus</a>
-                            </div>
+<div class="container py-4">
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3" id="gallery-grid">
+        <?php if ($result->num_rows > 0): ?>
+            <?php while($row = $result->fetch_assoc()): ?>
+                <div class="col fade-in">
+                    <div class="gallery-card rounded-3 overflow-hidden">
+                        <div class="gallery-img-wrapper">
+                            <img src="uploads/<?= htmlspecialchars($row['gambar']) ?>" 
+                                 class="gallery-img" 
+                                 alt="Foto Galeri"
+                                 data-bs-toggle="modal" 
+                                 data-bs-target="#imageModal"
+                                 onclick="showImageModal(this.src)">
                         </div>
                     </div>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <div class="col-12">
-                    <div class="text-center py-5">
-                        <img src="https://illustrations.popsy.co/amber/camera.svg" alt="No Data" class="mb-3" style="width: 150px; opacity: 0.7;">
-                        <h5 class="text-muted">Belum ada foto di galeri</h5>
-                        <p class="text-muted small">Mulai unggah momen kegiatan dan dokumentasi sekolah Anda.</p>
-                        <a href="tambah_galeri.php" class="btn btn-primary mt-2 rounded-pill"><i class="fas fa-plus me-1"></i> Unggah Sekarang</a>
-                    </div>
                 </div>
-            <?php endif; ?>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <div class="col-12 text-center py-5 fade-in">
+                <i class="fas fa-camera fa-4x text-muted mb-3 opacity-50"></i>
+                <h4 class="text-muted">Belum ada foto</h4>
+                <p class="text-muted">Galeri sedang dalam tahap pembaruan. Silakan kembali lagi nanti.</p>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-transparent border-0">
+            <div class="modal-header border-0 pb-0 justify-content-end">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center p-0">
+                <img id="modalImage" src="" class="img-fluid rounded shadow-lg" alt="Foto Galeri">
+            </div>
         </div>
     </div>
 </div>
 
-<?php include 'footer_admin.php'; ?>
+<script>
+function showImageModal(src) {
+    document.getElementById('modalImage').src = src;
+}
+</script>
+
+<style>
+.gallery-card {
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    background: #fff;
+}
+.gallery-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+.gallery-img-wrapper {
+    position: relative;
+    padding-top: 75%; /* 4:3 aspect ratio */
+    overflow: hidden;
+}
+.gallery-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+.gallery-card:hover .gallery-img {
+    transform: scale(1.05);
+}
+</style>
+
+<?php include 'footer.php'; ?>

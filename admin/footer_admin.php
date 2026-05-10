@@ -23,17 +23,7 @@
   </div>
 </div>
 
-<!-- Toast Notification -->
-<div class="toast-container position-fixed bottom-0 end-0 p-4" style="z-index: 1100">
-  <div id="pesanToast" class="toast align-items-center text-bg-success border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="7000">
-    <div class="d-flex">
-      <div class="toast-body fw-bold">
-        <i class="fas fa-bell me-2 fs-5 align-middle"></i> Anda memiliki pesan baru masuk!
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-  </div>
-</div>
+
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -190,50 +180,30 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    // Notifikasi Pesan Masuk (Polling)
-    let unreadCount = <?= isset($unread_count) ? (int)$unread_count : 0 ?>;
-    const notifSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
 
-    setInterval(() => {
-        fetch('cek_pesan_baru.php')
-            .then(response => response.json())
-            .then(data => {
-                if (data.unread > unreadCount) {
-                    // Ada pesan baru masuk!
-                    unreadCount = data.unread;
-                    const toastEl = document.getElementById('pesanToast');
-                    if (toastEl) {
-                        const toast = new bootstrap.Toast(toastEl);
-                        toast.show();
-                    }
-                    notifSound.play().catch(e => console.log('Audio autoplay prevented'));
-                    
-                    // Update badge di sidebar
-                    const badge = document.querySelector('.sidebar a[href="pesan.php"] .badge');
-                    if (badge) {
-                        badge.textContent = unreadCount;
-                    } else {
-                        const pesanLink = document.querySelector('.sidebar a[href="pesan.php"]');
-                        if (pesanLink) {
-                            pesanLink.innerHTML += ' <span class="badge bg-danger ms-2 rounded-pill">' + unreadCount + '</span>';
-                        }
-                    }
 
-                } else {
-                    // Update count jika pesan dibaca
-                    unreadCount = data.unread;
-                    
-                    // Update badge di sidebar jika berkurang
-                    const badge = document.querySelector('.sidebar a[href="pesan.php"] .badge');
-                    if (badge && unreadCount === 0) {
-                        badge.remove();
-                    } else if (badge) {
-                        badge.textContent = unreadCount;
-                    }
-                }
-            })
-            .catch(err => console.error('Error checking new messages:', err));
-    }, 10000); // Cek setiap 10 detik
+    // Sidebar Toggle Logic for Mobile
+    const openSidebarBtn = document.getElementById('openSidebar');
+    const closeSidebarBtn = document.getElementById('closeSidebar');
+    const sidebarMenu = document.getElementById('sidebarMenu');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    if (openSidebarBtn && closeSidebarBtn && sidebarMenu && sidebarOverlay) {
+        openSidebarBtn.addEventListener('click', function() {
+            sidebarMenu.classList.add('show');
+            sidebarOverlay.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        });
+
+        const closeSidebar = function() {
+            sidebarMenu.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        };
+
+        closeSidebarBtn.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+    }
 });
 </script>
 </body>
